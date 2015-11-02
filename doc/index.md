@@ -148,7 +148,7 @@ JSLite("div > p").hide();   // 另一个版本 JSLite 的代码
 
 
 ----
-## 插件编写
+## 实用工具
 
 ### $.extend 
 > 通过源对象扩展目标对象的属性，扩展 `JSLite` 元素集来提供新的方法（通常用来制作插件）
@@ -189,21 +189,36 @@ $.error("2222")
 //⇒ 输出错误 Uncaught 2222
 ```
 
+
+### $.now
+> 返回一个数字(时间戳)，表示当前时间。
+
+```js
+$.now()
+//⇒ 1446143000261
+```
+
 ----
 ## 字符串处理
+
+### $.camelCase
+将样式属性字符转换成驼峰。
+
+```js
+$.camelCase('webkit-background-clip') //⇒ "webkitBackgroundClip"
+$.camelCase('-webkit-background-clip') //⇒ "WebkitBackgroundClip"
+$.camelCase('-webkitBackgroundClip') //⇒ "WebkitBackgroundClip"
+
+// Support: IE9-11+
+// 对IE做处理
+$.camelCase('-ms-background-clip') //⇒ "msBackgroundClip"
+```
 
 ### $.trim
 去掉字符串起始和结尾的空格。
 
 ```js
 $.trim("  hello, how are you?  ");//⇒ "hello, how are you?"
-```
-
-### trim
-同上，去掉字符串起始和结尾的空格。
-
-```js
-"  hello, how are you?  ".trim()//⇒ "hello, how are you?"
 ```
 
 ----
@@ -305,7 +320,7 @@ var arr = [ 4, "Pete", 8, "John" ];
 $.inArray("John", arr);     //⇒ 3
 $.inArray(4, arr);          //⇒ 0
 $.inArray("David", arr);    //⇒ -1
-$.inArray("Pete", arr, 2);  //⇒ -1
+$.inArray("Pete", arr, 2);  //⇒ 1
 ```
 
 ### $.map
@@ -384,8 +399,16 @@ $.isPlainObject(window)     // => false
 $.isArray([1,2,3])  //⇒ true
 ```
 
+### $.isString
+> 判断是否为【字符串】。
+
+```js
+$.isString('字符串')  //⇒ true
+$.isString({})       //⇒ false
+```
+
 ### $.isJson
-> 判断是否为【数组】。
+> 判断是否为JSON对象。
 
 ```js
 $.isJson({})  //⇒ true
@@ -424,7 +447,7 @@ $.matches($("#box")[0], "#box")//⇒ true
 ```
 
 ### is
-> 判断当前匹配的元素集合中的元素，是否为一个选择器，DOM元素
+> 判断当前匹配的元素集合中的元素，是否为一个选择器，DOM元素 
 > is(selector)   ⇒ boolean  
 > is(element)    ⇒ boolean
 
@@ -583,7 +606,7 @@ $('#test').data() //⇒  {"aa":1,"www":334343}
 
 ```js
 $("#box").pluck("nodeName") //⇒ ["DIV"]
-$("#box").pluck("nextElementSibling") //⇒ <div class="boxs">1234567890</div>
+$("#box").pluck("nextElementSibling") //⇒ [<div class="boxs">1234567890</div>]
 $("#box").pluck('children') //⇒ [HTMLCollection[4]]
 ```
 
@@ -661,6 +684,8 @@ $n2.attr("data-key") //⇒ "UUID"
 ```js
 $("#box").css('color','yellow')     //⇒ self 返回Array 节点内容
 $("#box").css({'color':'yellow'})   //⇒ self 返回Array 节点内容
+$('div').eq(0).css(['color','font-size']) //⇒ Object {color: "rgb(0, 0, 0)", font-size: "14px"}
+$("div").css('color','') //⇒ self 返回Array 节点内容  删除属性
 ```
 
 ### hasClass
@@ -827,6 +852,10 @@ $("#box").empty()
 ```js
 $("#box").remove()
 //⇒ self <div id="box" class="boxOne box2 box3" ></div>
+$("#box").remove('span')  //⇒ "span" <span>sss</span> 删除匹配的对象内的所有 span
+$('div').remove(function(){
+    return 'span'
+});//⇒ "span" <span>sss</span>
 ```
 
 ### detach !
@@ -946,10 +975,19 @@ $("div").slice(3,5) //返回数组 3-5之间的元素
 ```
 
 ### add
-> 添加元素到匹配的`JSLite`对象集合
+> 添加元素到当前匹配的元素集合中。
 
-```js
-$("#box").siblings()
+```html
+<ul>
+    <li>list item 1</li>
+    <li>list item 2</li>
+    <li>list item 3</li>
+</ul>
+<p>a paragraph</p>
+
+<script type="text/javascript">
+    $('li').add('p').css('background-color', 'red');
+</script>
 ```
 
 ----
@@ -1404,7 +1442,7 @@ $(selector).load(URL,data,callback);
 
 这是示例文件（"demo.txt"）的内容：
 
-```js
+```html
 <h2>JSLite中AJAX的一个方法！</h2>
 <p id="demo">这是一个文本文件</p>
 ```
@@ -1413,8 +1451,12 @@ $(selector).load(URL,data,callback);
 ```js
 // 把文件 "demo.txt" 的内容加载到指定的 <div> 元素中
 $("#div1").load("demo.txt");
-//把 "demo.txt" 文件中 id="div1" 的元素的内容，加载到指定的 <div> 元素中：
-$("#div1").load("demo.txt #p1");
+//把 "demo.txt" 文件中 p 的元素的内容，加载到指定的 <div> 元素中：
+$("#div1").load("demo.txt p");
+//把 "demo.txt" 文件中 p 的元素的内容，加载到指定的 <div> 元素中 callback 
+$("#div1").load("demo.txt p",function(str){
+    console.log("输出demo.txt中的内容：",str)
+});
 ```
 
 

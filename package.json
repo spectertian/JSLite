@@ -2,13 +2,18 @@
   "name": "jslite",
   "version": "1.1.6",
   "description": "JSLite is a minimalist JavaScript library for modern browsers with a largely jQuery-compatible API. If you use jQuery, you already know how to use JSLite.",
+  "main": "dist/JSLite.js",
   "homepage": "https://github.com/JSLite/JSLite",
   "repository": {
     "type": "git",
     "url": "https://github.com/JSLite/JSLite.git"
   },
   "keywords": [
-    "JSLite"
+    "JSLite",
+    "jslite",
+    "library",
+    "browser",
+    "javascript"
   ],
   "author": "kenny wang <398188662@qq.com> (http://JSLite.io)",
   "license": {
@@ -16,14 +21,25 @@
     "url": "http://jslite.io/license/"
   },
   "bugs": {
-    "url": "https://github.com/JSLite/JSLite/issues"
+    "url": "https://github.com/JSLite/JSLite/blob/master/MIT-LICENSE"
+  },
+  "scripts": {
+    "test": "mocha-phantomjs test/index.html",
+    "start": "grunt watch"
   },
   "devDependencies": {
+    "chai": "^3.3.0",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-concat": "^0.4.0",
     "grunt-contrib-uglify": "^0.8.0",
     "grunt-contrib-watch": "^0.6.1",
-    "load-grunt-tasks": "^0.4.0"
+    "grunt-dist": "0.0.5",
+    "load-grunt-tasks": "^0.4.0",
+    "mocha": "^2.3.3"
+  },
+  "dependencies": {
+    "cli-color": "^1.0.0",
+    "mocha-phantomjs": "^4.0.1"
   }
 }
